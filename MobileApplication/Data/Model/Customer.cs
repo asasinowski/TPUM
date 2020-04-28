@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Data.Model
 {
-    public class Customer
+    public class Customer : Observer.IObserver<Pizza> // Obserwuje
     {
         public string name { get; }
         public string address { get; set; }
@@ -55,5 +55,40 @@ namespace Data.Model
             hashCode = hashCode * -1521134295 + orders.GetHashCode();
             return hashCode;
         }
+
+        #region Observer
+
+        public void Update(Pizza observable)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            string text =
+                "\n              ####################################################################\n" +
+                "              #                                                                  #\n" +
+                "              #  #######   ###   ###   ########   ########  #########            #\n" +
+                "              # ####       ###   ###   ###    ##  ###       ###     ##           #\n" +
+                "              # ###        ###   ###   ###    ##  ###       ###     ##           #\n" +
+                "              #  #######   ###   ###   ########   ########  #########            #\n" +
+                "              #    ######  ###   ###   ###        ###       #####                #\n" +
+                "              # ########    #######    ###        ########  ### ######           #\n" +
+                "              #                                                                  #\n" +
+                "              #   #####    ###  ###     ###     #########   #########     ###    #\n" +
+                "              # ###   ###  ### ###    ### ###        ###    #########   ### ###  #\n" +
+                "              # ###   ###  ######    ###   ###      ###           ###  ###   ### #\n" +
+                "              # ###   ###  ######    #########     ###            ###  ######### #\n" +
+                "              # ###   ###  ### ###   ###   ###    ###       ##    ###  ###   ### #\n" +
+                "              #   #####    ###  ###  ###   ###   #########  #########  ###   ### #\n" +
+                "              #                                                                  #\n" +
+                "              ####################################################################\n";
+
+
+            Console.WriteLine("[{0}] Drogi {4}, Pizza {1} przeceniona o {2}%. Nowa cena to {3}!" + text,
+                              DateTime.Now.ToString("HH:mm:ss.fff"),
+                              observable.name,
+                              observable.discount,
+                              Math.Round(observable.price, 2),
+                              this.name);
+        }
+
+        #endregion Observer
     }
 }

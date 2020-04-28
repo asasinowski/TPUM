@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Data
 {
-    public class Pizza
+    public class Pizza : Observer.IObservable<Customer>
     {
         public string name { get; }
         public float price { get; set; }
@@ -59,5 +59,26 @@ namespace Data
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(description);
             return hashCode;
         }
+
+        #region Observerable
+        public List<Customer> observers { get; } = new List<Customer>();
+        // private readonly List<Customer> _observers = new List<Customer>();
+
+        public void Subscribe(params Customer[] newObservers)
+        {
+            observers.AddRange(newObservers);
+        }
+
+        public void Unsubscribe(params Customer[] observersToRemove)
+        {
+            observers.RemoveAll(observersToRemove.Contains);
+        }
+
+        public void Notify()
+        {
+            observers.ForEach(observer => observer.Update(this));
+        }
+
+        #endregion Observerable
     }
 }

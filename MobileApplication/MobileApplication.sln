@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{ACD8F8AE-561E-42E6-BB09-A10DDF3E0451}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Observer", "Observer\Observer.csproj", "{31D856C6-1A33-4EC9-9B17-AFE4AC9AC47B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ACD8F8AE-561E-42E6-BB09-A10DDF3E0451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACD8F8AE-561E-42E6-BB09-A10DDF3E0451}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACD8F8AE-561E-42E6-BB09-A10DDF3E0451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D856C6-1A33-4EC9-9B17-AFE4AC9AC47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D856C6-1A33-4EC9-9B17-AFE4AC9AC47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D856C6-1A33-4EC9-9B17-AFE4AC9AC47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D856C6-1A33-4EC9-9B17-AFE4AC9AC47B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

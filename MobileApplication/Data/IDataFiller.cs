@@ -6,7 +6,6 @@ namespace Data
 {
     public interface IDataFiller
     {
-        //void Fill(DataContext data);
         DataContext Fill();
     }
 }

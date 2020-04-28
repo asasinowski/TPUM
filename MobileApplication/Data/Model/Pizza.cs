@@ -71,7 +71,6 @@ namespace Data
 
         #region Observerable
         public List<Customer> observers { get; } = new List<Customer>();
-        // private readonly List<Customer> _observers = new List<Customer>();
 
         public void Subscribe(params Customer[] newObservers)
         {

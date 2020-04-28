@@ -11,7 +11,6 @@ namespace Data.Model
         public Customer customer { get; set; }
         public DateTime orderTime { get; }
         public int realizationTime { get; set; }
-        public Status orderStatus { get; set; }
         public Order(Customer customer, List<Pizza> pizzas, Employee employee, int deliveryTimeInMinutes)
         {
             this.id = Guid.NewGuid();
@@ -20,7 +19,6 @@ namespace Data.Model
             this.supplier = employee;
             this.orderTime = DateTime.Now;
             this.realizationTime = deliveryTimeInMinutes;
-            this.orderStatus = Status.InProgress;
         }
 
         public Order(Customer customer, List<Pizza> pizzas, int deliveryTimeInMinutes)
@@ -30,7 +28,6 @@ namespace Data.Model
             this.pizzas = pizzas;
             this.orderTime = DateTime.Now;
             this.realizationTime = deliveryTimeInMinutes;
-            this.orderStatus = Status.Pending;
         }
 
         public override string ToString()
@@ -42,7 +39,6 @@ namespace Data.Model
             orderInfo += "\tPizzas           : " + pizzas;
             orderInfo += "\tOrder Time       : " + orderTime;
             orderInfo += "\tRealization Time : " + realizationTime;
-            orderInfo += "\tStatus           : " + orderStatus;
             return orderInfo;
         }
 
@@ -68,7 +64,6 @@ namespace Data.Model
             hashCode = hashCode * -1521134295 + EqualityComparer<Customer>.Default.GetHashCode(customer);
             hashCode = hashCode * -1521134295 + orderTime.GetHashCode();
             hashCode = hashCode * -1521134295 + realizationTime.GetHashCode();
-            hashCode = hashCode * -1521134295 + orderStatus.GetHashCode();
             return hashCode;
         }
     }

@@ -4,7 +4,6 @@ namespace Data
 {
     public class DataFactory : IDataFiller
     {
-        //public void Fill(DataContext data)
         public DataContext Fill()
         {
             DataContext data = new DataContext();

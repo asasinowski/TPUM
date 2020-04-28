@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         xmlns:viewModels="clr-namespace:GUI.ViewModels"
-        xmlns:Views="clr-namespace:GUI.Views"
         mc:Ignorable="d"
         DataContext="{StaticResource MainViewModelKey}"
         WindowState="Maximized"
@@ -41,15 +40,6 @@
                     Content="SUBSKRYBUJ" BorderBrush="Transparent" Foreground="White"  FontSize="15" Click="Button_Click"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="2" >
-            <!--<TextBlock Text="{Binding cartPrice, StringFormat=\{0:C\}, 
-                       UpdateSourceTrigger=PropertyChanged}" 
-                       HorizontalAlignment="Right" 
-                       Margin="50 50 20 0" 
-                       FontSize="20" 
-                       FontWeight="Bold">
-
-            </TextBlock>
-             -->
             <ListView Height="300" 
                       Margin="15" 
                       BorderBrush="Transparent" 

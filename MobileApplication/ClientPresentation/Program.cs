@@ -26,7 +26,6 @@ namespace ClientPresentation
             List<Pizza> pizzas = (List<Pizza>)os.repository.GetAllPizzas();
             pizzas.ForEach(pizza => pizza.Subscribe(customers.ToArray()));
 
-            int counter = 0;
             while (true)
             {
 

@@ -12,7 +12,6 @@ namespace Data
         public Repository(IDataFiller filler)
         {
             data = filler.Fill();
-            //filler.Fill(data);
         }
 
         #region CRUD Customer
@@ -86,18 +85,6 @@ namespace Data
         {
             return data.employees;
         }
-
-        /*
-        public IEnumerable<Employee> GetBusyEmployees()
-        {
-            return data.employees.FindAll(x => x.isBusy);
-        }
-
-        public IEnumerable<Employee> GetFreeEmployees()
-        {
-            return data.employees.FindAll(x => !x.isBusy);
-        }
-        */
 
         // Delete
         public void DeleteEmployee(Employee employee)
@@ -209,7 +196,6 @@ namespace Data
             {
                 throw new Exception("There is no order of ID " + order.id);
             }
-            orderFromDataBase.orderStatus = order.orderStatus;
             orderFromDataBase.realizationTime = order.realizationTime;
             orderFromDataBase.pizzas = order.pizzas;
             orderFromDataBase.supplier = order.supplier;

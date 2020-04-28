@@ -18,7 +18,6 @@ namespace GUI.ViewModels
         public List<Pizza> ListViewPizzas { get; set; }
         public Pizza selectedPizza { get; set; }
         public ObservableCollection<Pizza> cart { get; set; } = new ObservableCollection<Pizza>();
-        //public float cartPrice { get; set; }
         public Pizza selectedCart { get; set; }
         public string customerName { get; set; }
         private OrderSystem os;
@@ -59,8 +58,6 @@ namespace GUI.ViewModels
         public void AddToCart()
         {
             cart.Add(selectedPizza);
-            Trace.WriteLine("MAM PIZZĘ");
-            //cartPrice += selectedPizza.price;
         }
 
         public void DeleteFromCart()
@@ -68,7 +65,6 @@ namespace GUI.ViewModels
             if (cart.Contains(selectedCart))
             {
                 cart.Remove(selectedCart);
-                //cartPrice -= selectedPizza.price;
             }
         }
 

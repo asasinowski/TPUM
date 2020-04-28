@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using FluentAssertions;
 
-namespace LogicTests
+namespace Tests
 {
     [TestClass]
     public class DataTests

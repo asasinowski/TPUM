@@ -2,6 +2,8 @@
 using Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +16,7 @@ namespace Logic
         private readonly object m_SyncObjectArchive = new object();
         private Semaphore signal = new Semaphore(0, 1);
         private const int MAX_ORDERS = 30;
+        private SaleTimer sTimer;
 
         public OrderSystem(IDataFiller filler)
         {
@@ -36,6 +39,9 @@ namespace Logic
                 Console.WriteLine("[{0}] Dostawca {1} rozpoczął pracę.", DateTime.Now.ToString("HH:mm:ss.fff"), employee.name);
                 _tasksInProgress.Add(Task.Run(() => Work(employee)));
             }
+
+            sTimer = new SaleTimer();
+            sTimer.StartTimer((List<Pizza>)repository.GetAllPizzas());
         }
 
         private void Work(Employee employee)

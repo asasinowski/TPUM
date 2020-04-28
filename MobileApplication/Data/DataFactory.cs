@@ -60,21 +60,21 @@ namespace Data
             data.employees.Add(new Employee("Jaga"));
             data.employees.Add(new Employee("Leszek"));
 
-            data.pizzas.Add(new Pizza("Krowi placek", 28.23f, "sos pomidorowy, ser, oregano"));
-            data.pizzas.Add(new Pizza("Gruba świnka", 21.00f, "gyros wieprzowy, kabanos , podwójny ser, cebula czerwona, pieczarki"));
-            data.pizzas.Add(new Pizza("Tłusta krówka", 18.22f, "sos boloński (sos pomidorowy + mięso mielone), podwójny ser, cebula biała, czosnek, ogórek konserwowy"));
-            data.pizzas.Add(new Pizza("Egzotyczny prosiak", 26.18f, "szynka, ananas, curry"));
-            data.pizzas.Add(new Pizza("Płacze osioł", 27.87f, "salami, cebula biała"));
-            data.pizzas.Add(new Pizza("Wiejskie klimaty", 19.55f, "bekon, cebula biała"));
-            data.pizzas.Add(new Pizza("Osioł na Hawajach", 26.21f, "salami, ananas, cebula biała"));
-            data.pizzas.Add(new Pizza("Świnka tańczy i śpiewa", 31.55f, "boczek, pieczarki, cebula biała"));
-            data.pizzas.Add(new Pizza("Czym chata bogata", 29.30f, "szynka, kiełbasa, cebula biała, papryka świeża, kabanos"));
-            data.pizzas.Add(new Pizza("Pipidówka", 26.86f, "pieczarki, kabanos, groszek, ogórek kiszony"));
-            data.pizzas.Add(new Pizza("Kurczę pieczone", 24.21f, "gyros drobiowy, ogórek kiszony cebula biała"));
-            data.pizzas.Add(new Pizza("Dzika świnia", 31.74f, "boczek, gyros wieprzowy, ogórek konserwowy, cebula biała"));
-            data.pizzas.Add(new Pizza("Piecze tu i ówdzie", 20.33f, "salami, jalapeno (sos sambal)"));
-            data.pizzas.Add(new Pizza("Muchomoty", 23.36f, "ser, szynka, pieczarki"));
-            data.pizzas.Add(new Pizza("Pieją kury pieją", 26.97f, "gyros drobiowy, brokuły, ser typu greckiego"));
+            data.pizzas.Add(new Pizza("Krowi placek", 28.23f, "sos pomidorowy, ser, oregano", "/pizzaPhotos/1.png"));
+            data.pizzas.Add(new Pizza("Gruba świnka", 21.00f, "gyros wieprzowy, kabanos , podwójny ser, cebula czerwona, pieczarki", "/pizzaPhotos/2.png"));
+            data.pizzas.Add(new Pizza("Tłusta krówka", 18.22f, "sos boloński (sos pomidorowy + mięso mielone), podwójny ser, cebula biała, czosnek, ogórek konserwowy", "/pizzaPhotos/3.png"));
+            data.pizzas.Add(new Pizza("Egzotyczny prosiak", 26.18f, "szynka, ananas, curry", "/pizzaPhotos/5.png"));
+            data.pizzas.Add(new Pizza("Płacze osioł", 27.87f, "salami, cebula biała", "/pizzaPhotos/6.png"));
+            data.pizzas.Add(new Pizza("Wiejskie klimaty", 19.55f, "bekon, cebula biała", "/pizzaPhotos/5.png"));
+            data.pizzas.Add(new Pizza("Osioł na Hawajach", 26.21f, "salami, ananas, cebula biała", "/pizzaPhotos/7.png"));
+            data.pizzas.Add(new Pizza("Świnka tańczy i śpiewa", 31.55f, "boczek, pieczarki, cebula biała", "/pizzaPhotos/8.png"));
+            data.pizzas.Add(new Pizza("Czym chata bogata", 29.30f, "szynka, kiełbasa, cebula biała, papryka świeża, kabanos", "/pizzaPhotos/9.png"));
+            data.pizzas.Add(new Pizza("Pipidówka", 26.86f, "pieczarki, kabanos, groszek, ogórek kiszony", "/pizzaPhotos/10.png"));
+            data.pizzas.Add(new Pizza("Kurczę pieczone", 24.21f, "gyros drobiowy, ogórek kiszony cebula biała", "/pizzaPhotos/11.png"));
+            data.pizzas.Add(new Pizza("Dzika świnia", 31.74f, "boczek, gyros wieprzowy, ogórek konserwowy, cebula biała", "/pizzaPhotos/12.png"));
+            data.pizzas.Add(new Pizza("Piecze tu i ówdzie", 20.33f, "salami, jalapeno (sos sambal)", "/pizzaPhotos/13.png"));
+            data.pizzas.Add(new Pizza("Muchomoty", 23.36f, "ser, szynka, pieczarki", "/pizzaPhotos/14.png"));
+            data.pizzas.Add(new Pizza("Pieją kury pieją", 26.97f, "gyros drobiowy, brokuły, ser typu greckiego", "/pizzaPhotos/17.png"));
 
             return data;
         }

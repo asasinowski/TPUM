@@ -10,6 +10,7 @@ namespace Data
         public float price { get; set; }
         public string description { get; set; }
         private float _discount; // %
+        public string image { get; set; }
 
         public float discount
         {
@@ -27,6 +28,14 @@ namespace Data
             this.name = name;
             this.price = price;
             this.description = description;
+        }
+
+        public Pizza(string name, float price, string description, string image)
+        {
+            this.name = name;
+            this.price = price;
+            this.description = description;
+            this.image = image;
         }
 
         public override string ToString()

@@ -61,7 +61,7 @@ namespace Data.Model
         public void Update(Pizza observable)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            string text =
+            string text = 
                 "\n              ####################################################################\n" +
                 "              #                                                                  #\n" +
                 "              #  #######   ###   ###   ########   ########  #########            #\n" +
@@ -81,7 +81,9 @@ namespace Data.Model
                 "              ####################################################################\n";
 
 
-            Console.WriteLine("[{0}] Drogi {4}, Pizza {1} przeceniona o {2}%. Nowa cena to {3}!" + text,
+            Console.WriteLine("[{1}] Nowy email na adres: {0}\n" +
+                              "Drogi {5}, Pizza {2} przeceniona o {3}%. Nowa cena to {4}!" + text,
+                              this.email,
                               DateTime.Now.ToString("HH:mm:ss.fff"),
                               observable.name,
                               observable.discount,

@@ -1,6 +1,5 @@
-using Data;
-using Data.Model;
 using Logic;
+using Logic.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,41 +10,35 @@ namespace ClientPresentation
     {
         static void Main(string[] args)
         {
-            IDataFiller filler = new DataFactory();
-            OrderSystem os = new OrderSystem(filler);
+            OrderSystem os = new OrderSystem();
             os.StartWorkDay();
 
-            List<Customer> customers = new List<Customer>();
-            Customer customer1 = os.repository.GetCustomer("Mordred");
-            Customer customer2 = os.repository.GetCustomer("Arthur");
-            Customer customer3 = os.repository.GetCustomer("Nimue");
+            CustomerDTO customer1 = os.GetCustomerDTO("Mordred");
+            CustomerDTO customer2 = os.GetCustomerDTO("Arthur");
+            CustomerDTO customer3 = os.GetCustomerDTO("Nimue");
 
-            customers.Add(customer1);
-            customers.Add(customer2);
-
-            List<Pizza> pizzas = (List<Pizza>)os.repository.GetAllPizzas();
-            pizzas.ForEach(pizza => pizza.Subscribe(customers.ToArray()));
-
+            os.SubscribeToPromotion(customer1);
+            os.SubscribeToPromotion(customer3);
             while (true)
             {
 
-                List<Pizza> pizzas1 = new List<Pizza>();
-                Pizza pizza1 = os.repository.GetPizza("Krowi placek");
-                pizzas.Add(pizza1);
+                List<PizzaDTO> pizzas1 = new List<PizzaDTO>();
+                PizzaDTO pizza1 = os.GetPizzaDTO("Krowi placek");
+                pizzas1.Add(pizza1);
                 os.OrderPizza(pizzas1, customer1);
 
                 Thread.Sleep(2000);
 
-                List<Pizza> pizzas2 = new List<Pizza>();
-                Pizza pizza2 = os.repository.GetPizza("Krowi placek");
+                List<PizzaDTO> pizzas2 = new List<PizzaDTO>();
+                PizzaDTO pizza2 = os.GetPizzaDTO("Krowi placek");
                 pizzas2.Add(pizza2);
                 os.OrderPizza(pizzas2, customer2);
 
                 Thread.Sleep(2000);
 
-                List<Pizza> pizzas3 = new List<Pizza>();
-                Pizza pizza3 = os.repository.GetPizza("Krowi placek");
-                pizzas.Add(pizza3);
+                List<PizzaDTO> pizzas3 = new List<PizzaDTO>();
+                PizzaDTO pizza3 = os.GetPizzaDTO("Krowi placek");
+                pizzas3.Add(pizza3);
                 os.OrderPizza(pizzas3, customer3);
              }
         }

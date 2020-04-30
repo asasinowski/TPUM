@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Data
+namespace Data.Model
 {
     public class Pizza : Observer.IObservable<Customer>
     {

@@ -1,6 +1,5 @@
-﻿using Data;
-using Data.Model;
-using Logic;
+﻿using Logic;
+using Logic.DTO;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -15,10 +14,10 @@ namespace GUI.ViewModels
 
         private readonly Dispatcher _dispatcher;
 
-        public List<Pizza> ListViewPizzas { get; set; }
-        public Pizza selectedPizza { get; set; }
-        public ObservableCollection<Pizza> cart { get; set; } = new ObservableCollection<Pizza>();
-        public Pizza selectedCart { get; set; }
+        public List<PizzaDTO> ListViewPizzas { get; set; }
+        public PizzaDTO selectedPizza { get; set; }
+        public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
+        public PizzaDTO selectedCart { get; set; }
         public string customerName { get; set; }
         private OrderSystem os;
 
@@ -38,12 +37,11 @@ namespace GUI.ViewModels
 
         public MainViewModel()
         {
-            IDataFiller dataFiller = new DataFactory();
-            os = new OrderSystem(dataFiller);
+            os = new OrderSystem();
             os.StartWorkDay();
 
             this._dispatcher = Dispatcher.CurrentDispatcher;
-            this.ListViewPizzas = (List<Pizza>)os.repository.GetAllPizzas();   
+            this.ListViewPizzas = (List<PizzaDTO>)os.GetAllPizzasDTO();   
             this.AddToCartCommand = new RelayCommand(param => AddToCart(), null);
             this.DeleteFromCartCommand = new RelayCommand(param => DeleteFromCart(), null);
             this.OrderPizzaCommand = new RelayCommand(param => OrderPizza(), null);
@@ -76,21 +74,21 @@ namespace GUI.ViewModels
                 return;
             }
 
-            Customer customer = os.repository.GetCustomer(customerName);
-            if(customer == null)
+            CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
+            if(customerDTO == null)
             {
                 MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            List<Pizza> pizzasToOrder = new List<Pizza>(cart);
+            List<PizzaDTO> pizzasToOrder = new List<PizzaDTO>(cart);
             if(pizzasToOrder.Count == 0)
             {
                 MessageBoxResult noCustomer = MessageBox.Show("Nie wybrano pizzy.", "Nie wybrano pizzy.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            os.OrderPizza(pizzasToOrder, customer);
+            os.OrderPizza(pizzasToOrder, customerDTO);
 
             MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -104,15 +102,14 @@ namespace GUI.ViewModels
                 return;
             }
 
-            Customer customer = os.repository.GetCustomer(customerName);
-            if (customer == null)
+            CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
+            if (customerDTO == null)
             {
                 MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika. Wpisz ją w lewym dolnym rogu ekranu.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            List<Pizza> pizzas = (List<Pizza>)os.repository.GetAllPizzas();
-            pizzas.ForEach(pizza => pizza.Subscribe(customer));
+            os.SubscribeToPromotion(customerDTO);
 
             MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
         }

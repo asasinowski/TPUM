@@ -1,5 +1,6 @@
 ﻿using Data;
 using Data.Model;
+using Logic.DTO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,8 +24,16 @@ namespace Logic
             this.repository = new Repository(filler);
         }
 
-        public void OrderPizza(List<Pizza> pizzas, Customer customer)
+        public OrderSystem()
         {
+            IDataFiller filler = new DataFactory();
+            this.repository = new Repository(filler);
+        }
+
+        public void OrderPizza(List<PizzaDTO> pizzasDTO, CustomerDTO customerDTO)
+        {
+            Customer customer = GetCustomer(customerDTO);
+            List<Pizza> pizzas = GetPizzaList(pizzasDTO);
             var order = Task.Run(() => CreateOrder(pizzas, customer));
         }
 
@@ -126,6 +135,50 @@ namespace Logic
             Console.ForegroundColor = ConsoleColor.DarkGreen; // Tylko do celów urchomieniowych. Nie ma gwarancji, że wypisze na zielono.
             Console.WriteLine("[{0}] Zamówienie {1} przyjęte, liczba oczekujących = {2}", DateTime.Now.ToString("HH:mm:ss.fff"), order.id, ((List<Order>)repository.GetAllOrders()).Count);
         }
+
+        public void SubscribeToPromotion(CustomerDTO customerDTO)
+        {
+            Customer customer = GetCustomer(customerDTO);
+            List<Pizza> pizzas = (List<Pizza>)repository.GetAllPizzas();
+            pizzas.ForEach(pizza => pizza.Subscribe(customer));
+        }
+
+        #region DataAccess
+        public CustomerDTO GetCustomerDTO(string name)
+        {
+            return DTOMappings.MapCustomer(repository.GetCustomer(name));
+        }
+
+        public PizzaDTO GetPizzaDTO(string name)
+        {
+            return DTOMappings.MapPizza(repository.GetPizza(name));
+        }
+        public List<PizzaDTO> GetAllPizzasDTO()
+        {
+            return DTOMappings.MapPizzaList((List<Pizza>)repository.GetAllPizzas());
+        }
+
+        public Customer GetCustomer(CustomerDTO customerDTO)
+        {
+            return repository.GetCustomer(customerDTO.name);
+        }
+
+        public Pizza GetPizza(PizzaDTO pizzaDTO)
+        {
+            return repository.GetPizza(pizzaDTO.name);
+        }
+
+        public List<Pizza> GetPizzaList(List<PizzaDTO> pizzasDTO)
+        {
+            List<Pizza> pizzaList = new List<Pizza>();
+            foreach (PizzaDTO pizzaDTO in pizzasDTO)
+            {
+                pizzaList.Add(repository.GetPizza(pizzaDTO.name));
+            }
+            return pizzaList;
+        }
+
+        #endregion DataAccess
     }
 }
 

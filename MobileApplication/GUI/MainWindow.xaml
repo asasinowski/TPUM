@@ -37,7 +37,7 @@
                     Command="{Binding SubscribeCommand}"
                     Background="#FF535353" 
                     FontWeight="Bold" 
-                    Content="SUBSKRYBUJ" BorderBrush="Transparent" Foreground="White"  FontSize="15" Click="Button_Click"/>
+                    Content="SUBSKRYBUJ" BorderBrush="Transparent" Foreground="White"  FontSize="15"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="2" >
             <ListView Height="300" 

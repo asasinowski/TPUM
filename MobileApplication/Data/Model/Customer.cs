@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Data.Observer;
+using System;
 using System.Collections.Generic;
 
 namespace Data.Model
 {
-    public class Customer : Observer.IObserver<Pizza> // Obserwuje
+    public class Customer : IObserver<PizzaEvent> // Obserwuje
     {
         public string name { get; }
         public string address { get; set; }
         public string email { get; }
         public string phone { get; set; }
-        public int orders { get; set; }
 
         public Customer(string name, string address, string email, string phone)
         {
@@ -17,7 +17,6 @@ namespace Data.Model
             this.address = address;
             this.email = email;
             this.phone = phone;
-            this.orders = 0;
         }
 
         public override string ToString()
@@ -27,7 +26,6 @@ namespace Data.Model
             customerInfo += "\tAddress    : " + address;
             customerInfo += "\tEmail      : " + email;
             customerInfo += "\tPhone      : " + phone;
-            customerInfo += "\tOrders     : " + orders;
             return customerInfo;
         }
 
@@ -52,16 +50,34 @@ namespace Data.Model
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(address);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(email);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(phone);
-            hashCode = hashCode * -1521134295 + orders.GetHashCode();
             return hashCode;
         }
 
         #region Observer
 
-        public void Update(Pizza observable)
+        private IDisposable unsubscriber;
+
+        public virtual void Subscribe(IObservable<PizzaEvent> provider)
         {
+            unsubscriber = provider.Subscribe(this);
+        }
+
+        public virtual void Unsubscribe()
+        {
+            unsubscriber.Dispose();
+        }
+
+        public void OnError(Exception error)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[{0}]Wystąpił błąd subskrybcji.", DateTime.Now.ToString("HH:mm:ss.fff"));
+        }
+
+        public void OnNext(PizzaEvent value)
+        {
+
             Console.ForegroundColor = ConsoleColor.Yellow;
-            string text = 
+            string text =
                 "\n              ####################################################################\n" +
                 "              #                                                                  #\n" +
                 "              #  #######   ###   ###   ########   ########  #########            #\n" +
@@ -82,15 +98,24 @@ namespace Data.Model
 
 
             Console.WriteLine("[{1}] Nowy email na adres: {0}\n" +
+                              "Temat: {6}\n" +
                               "Drogi {5}, Pizza {2} przeceniona o {3}%. Nowa cena to {4}!" + text,
                               this.email,
                               DateTime.Now.ToString("HH:mm:ss.fff"),
-                              observable.name,
-                              observable.discount,
-                              Math.Round(observable.price, 2),
-                              this.name);
+                              value.pizza.name,
+                              value.pizza.discount,
+                              Math.Round(value.pizza.price, 2),
+                              this.name,
+                              value.description);
         }
 
-        #endregion Observer
+        public void OnCompleted()
+        {
+            unsubscriber.Dispose();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("[{0}] Subskrybcja zakończona. Powiadomienia nie będą wys", DateTime.Now.ToString("HH:mm:ss.fff"));
+        }
+
+        #endregion
     }
 }

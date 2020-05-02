@@ -1,10 +1,9 @@
-﻿using Data.Model;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Data.Model
 {
-    public class Pizza : Observer.IObservable<Customer>
+    public class Pizza
     {
         public string name { get; }
         public float price { get; set; }
@@ -19,7 +18,6 @@ namespace Data.Model
             {
                 _discount = value;
                 price *= (1 - _discount / 100);
-                Notify();
             }
         }
 
@@ -68,25 +66,5 @@ namespace Data.Model
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(description);
             return hashCode;
         }
-
-        #region Observerable
-        public List<Customer> observers { get; } = new List<Customer>();
-
-        public void Subscribe(params Customer[] newObservers)
-        {
-            observers.AddRange(newObservers);
-        }
-
-        public void Unsubscribe(params Customer[] observersToRemove)
-        {
-            observers.RemoveAll(observersToRemove.Contains);
-        }
-
-        public void Notify()
-        {
-            observers.ForEach(observer => observer.Update(this));
-        }
-
-        #endregion Observerable
     }
 }

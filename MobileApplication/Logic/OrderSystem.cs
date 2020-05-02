@@ -1,10 +1,9 @@
 ﻿using Data;
 using Data.Model;
+using Data.Observer;
 using Logic.DTO;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +17,7 @@ namespace Logic
         private Semaphore signal = new Semaphore(0, 1);
         private const int MAX_ORDERS = 30;
         private SaleTimer sTimer;
+        private SalesCreator provider = new SalesCreator();
 
         public OrderSystem(IDataFiller filler)
         {
@@ -50,7 +50,7 @@ namespace Logic
             }
 
             sTimer = new SaleTimer();
-            sTimer.StartTimer((List<Pizza>)repository.GetAllPizzas());
+            sTimer.StartTimer((List<Pizza>)repository.GetAllPizzas(), provider);
         }
 
         private void Work(Employee employee)
@@ -139,8 +139,7 @@ namespace Logic
         public void SubscribeToPromotion(CustomerDTO customerDTO)
         {
             Customer customer = GetCustomer(customerDTO);
-            List<Pizza> pizzas = (List<Pizza>)repository.GetAllPizzas();
-            pizzas.ForEach(pizza => pizza.Subscribe(customer));
+            customer.Subscribe(provider);
         }
 
         #region DataAccess

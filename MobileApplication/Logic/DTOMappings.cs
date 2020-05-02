@@ -1,8 +1,6 @@
 ﻿using Data.Model;
 using Logic.DTO;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Logic
 {
@@ -16,7 +14,6 @@ namespace Logic
                 address = customer.address,
                 email = customer.email,
                 phone = customer.phone,
-                orders = customer.orders
             };
 
             return customerDTO;

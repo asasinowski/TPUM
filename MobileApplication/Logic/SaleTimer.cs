@@ -18,7 +18,7 @@ namespace Logic
             this.pizzas = pizzas;
             this.provider = salesCreator;
             m_nStart = Environment.TickCount;
-            oTimer = new Timer(new TimerCallback(CallbackMethod), null, 0, 20000);
+            oTimer = new Timer(new TimerCallback(CallbackMethod), null, 0, 10000);
         }
 
         private void CallbackMethod(object oStateObject)
@@ -48,7 +48,7 @@ namespace Logic
             ((new DateTime(2020, 10, 20)- DateTime.Now).Days + " dni do Pasztecika Szczecińskiego!").ToString(),
             ((new DateTime(2020, 10, 21)- DateTime.Now).Days + " dni do Dnia bez skarpetek!").ToString(),
             ((new DateTime(2020, 10, 22)- DateTime.Now).Days + " DNI DO DNIA CAPS LOCKA!").ToString(),
-            ((new DateTime(2020, 11, 17)- DateTime.Now).Days + " dni do Światowego Dnia Studenta1!").ToString(),
+            ((new DateTime(2020, 11, 17)- DateTime.Now).Days + " dni do Światowego Dnia Studenta!").ToString(),
         };                                                       
     }
 }

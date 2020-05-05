@@ -67,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTests.cs" />
-    <Compile Include="ObserverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,10 +80,6 @@
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{A11E0051-8B22-498F-BE69-0B516168229D}</Project>
       <Name>Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Observer\Observer.csproj">
-      <Project>{31D856C6-1A33-4EC9-9B17-AFE4AC9AC47B}</Project>
-      <Name>Observer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

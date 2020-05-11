@@ -30,11 +30,11 @@ namespace Logic
             this.repository = new Repository(filler);
         }
 
-        public void OrderPizza(List<PizzaDTO> pizzasDTO, CustomerDTO customerDTO)
+        public async void OrderPizza(List<PizzaDTO> pizzasDTO, CustomerDTO customerDTO)
         {
             Customer customer = GetCustomer(customerDTO);
             List<Pizza> pizzas = GetPizzaList(pizzasDTO);
-            var order = Task.Run(() => CreateOrder(pizzas, customer));
+            await Task.Run(() => CreateOrder(pizzas, customer));
         }
 
         public void StartWorkDay()

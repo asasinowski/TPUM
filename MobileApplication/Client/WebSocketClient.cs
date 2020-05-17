@@ -10,6 +10,9 @@ namespace Communication
     {
         private static UTF8Encoding encoding = new UTF8Encoding();
 
+        static string message; 
+
+
         static void Main(string[] args)
         {
             Connect("ws://localhost/test").Wait();
@@ -45,17 +48,20 @@ namespace Communication
 
         private static async Task Send(ClientWebSocket webSocket)
         {
+            int i = 0;
             while (webSocket.State == WebSocketState.Open)
             {             
                 Console.WriteLine("Write some to send over to server...");
-                string stringToSend = Console.ReadLine();
+                string stringToSend = "Ala " + i;
                 byte[] buffer = encoding.GetBytes(stringToSend);
 
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Binary, false, CancellationToken.None);
-                Console.WriteLine("Send:     " + stringToSend);
-                await Task.Delay(300);
+                Console.WriteLine("SenT:     " + stringToSend);
+                await Task.Delay(1000);
+                i++;
             }
         }
+
 
         private static async Task Receive(ClientWebSocket webSocket)
         {
@@ -71,7 +77,8 @@ namespace Communication
                 }
                 else
                 {
-                    Console.WriteLine("Receive:   " + Encoding.UTF8.GetString(buffer).TrimEnd('\0'));
+                    message = Encoding.UTF8.GetString(buffer).TrimEnd('\0');
+                    Console.WriteLine("ReceiveD:   " + message);
                 }
 
             }

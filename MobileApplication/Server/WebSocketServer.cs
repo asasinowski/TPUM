@@ -26,6 +26,15 @@ namespace Server
             }
         }
 
+
+        private string Process_The_Data(string inp)
+        {
+            Console.WriteLine("in: " + inp);
+            string outp = "Basia M. " + inp;
+            Console.WriteLine("out: " + outp);
+            return outp;
+        }
+
         private async void ProcessRequest(HttpListenerContext httpListenerContext)
         {
             WebSocketContext webSocketContext = null;
@@ -48,7 +57,7 @@ namespace Server
 
             try
             {
-                int size = 1024;
+                int size = 8192;
                 byte[] receiveBuffer = new byte[size];
                 while (webSocket.State == WebSocketState.Open)
                 {
@@ -61,8 +70,11 @@ namespace Server
                     }
                     else
                     {
-                        await webSocket.SendAsync(new ArraySegment<byte>(receiveBuffer, 0, receiveResult.Count), WebSocketMessageType.Binary, receiveResult.EndOfMessage, CancellationToken.None);
-                        Console.WriteLine("Receive:   " + Encoding.UTF8.GetString(receiveBuffer).TrimEnd('\0'));
+                        string response = Process_The_Data(Encoding.UTF8.GetString(receiveBuffer).TrimEnd('\0'));
+                        ArraySegment<byte> outb = new ArraySegment<byte>(Encoding.UTF8.GetBytes(response));
+                        await webSocket.SendAsync(outb, WebSocketMessageType.Binary, receiveResult.EndOfMessage, CancellationToken.None);
+                        //new ArraySegment<byte>(receiveBuffer, 0, receiveResult.Count), WebSocketMessageType.Binary, receiveResult.EndOfMessage, CancellationToken.None);
+                        //Console.WriteLine("Receive:   " + (receiveBuffer).TrimEnd('\0'));
                     }
                 }
             }

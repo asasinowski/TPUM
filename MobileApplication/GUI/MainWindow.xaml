@@ -9,7 +9,7 @@
         DataContext="{StaticResource MainViewModelKey}"
         WindowState="Maximized"
         FontFamily="Lato"
-        Title="Signal Generator" Height="768" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="Pizzeria Client" Height="768" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <Style x:Key="myListboxStyle">
             <Style.Resources>

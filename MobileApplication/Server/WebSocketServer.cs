@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Logic;
+using Logic.DTO;
+using Logic.Requests;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
@@ -9,12 +14,17 @@ namespace Server
 {
     public class WebSocketServer
     {
+        OrderSystem os;
+
         public async void Start(string httpListenerPrefix)
         {
             HttpListener httpListener = new HttpListener();
             httpListener.Prefixes.Add(httpListenerPrefix);
             httpListener.Start();
             Console.WriteLine("Server listening...");
+
+            os = new OrderSystem();
+            os.StartWorkDay();
 
             while (true)
             {
@@ -26,13 +36,53 @@ namespace Server
             }
         }
 
-
-        private string Process_The_Data(string inp)
+        private string ProcessData(string inp)
         {
-            Console.WriteLine("in: " + inp);
-            string outp = "Basia M. " + inp;
-            Console.WriteLine("out: " + outp);
-            return outp;
+            Console.WriteLine("Serwer otrzymał: " + inp);
+            RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(inp);
+
+            string output = String.Empty;
+            switch (request.Tag)
+            {
+                case "order":
+                    RequestPizzaOrder requestPizzaOrder = JsonConvert.DeserializeObject<RequestPizzaOrder>(inp);
+                    output = ProcessOrderRequest(requestPizzaOrder);
+                    break;
+                case "pizzas":
+                    output =  ProcessPizzaRequest();
+                    break;
+                case "subscription":
+                    RequestCustomerSubscription requestCustomerSubscription = JsonConvert.DeserializeObject<RequestCustomerSubscription>(inp);
+                    output = ProcessSubscriptionRequest(requestCustomerSubscription);
+                    break;
+            }
+
+            Console.WriteLine("Output: " + output);
+            return output;
+        }
+
+        private string ProcessOrderRequest(RequestPizzaOrder request)
+        {
+            os.OrderPizza(request.pizzas, request.customer);
+            RequestWeb response = new RequestWeb("order");
+            string json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            return json;
+        }
+
+        private string ProcessPizzaRequest()
+        {
+            List<PizzaDTO> pizzas = os.GetAllPizzasDTO();
+            RequestWeb response = new ResponsePizzaList("pizzas", pizzas);
+            string json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            return json;
+        }
+
+        private string ProcessSubscriptionRequest(RequestCustomerSubscription request)
+        {
+            os.SubscribeToPromotion(request.customer);
+            RequestWeb response = new RequestWeb("subscription");
+            string json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            return json;
         }
 
         private async void ProcessRequest(HttpListenerContext httpListenerContext)
@@ -70,11 +120,9 @@ namespace Server
                     }
                     else
                     {
-                        string response = Process_The_Data(Encoding.UTF8.GetString(receiveBuffer).TrimEnd('\0'));
+                        string response = ProcessData(Encoding.UTF8.GetString(receiveBuffer).TrimEnd('\0'));
                         ArraySegment<byte> outb = new ArraySegment<byte>(Encoding.UTF8.GetBytes(response));
                         await webSocket.SendAsync(outb, WebSocketMessageType.Binary, receiveResult.EndOfMessage, CancellationToken.None);
-                        //new ArraySegment<byte>(receiveBuffer, 0, receiveResult.Count), WebSocketMessageType.Binary, receiveResult.EndOfMessage, CancellationToken.None);
-                        //Console.WriteLine("Receive:   " + (receiveBuffer).TrimEnd('\0'));
                     }
                 }
             }

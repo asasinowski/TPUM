@@ -1,8 +1,10 @@
 ﻿using Logic;
 using Logic.DTO;
+using Logic.Requests;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -14,15 +16,16 @@ namespace GUI.ViewModels
 
         private readonly Dispatcher _dispatcher;
 
-        public List<PizzaDTO> ListViewPizzas { get; set; }
+        public ObservableCollection<PizzaDTO> ListViewPizzas { get; set; }
         public PizzaDTO selectedPizza { get; set; }
         public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
         public PizzaDTO selectedCart { get; set; }
         public string customerName { get; set; }
         private OrderSystem os;
+        private WebSocketClient webSocketClient;
 
 
-
+   
         #endregion
 
         #region RelayCommands
@@ -37,11 +40,18 @@ namespace GUI.ViewModels
 
         public MainViewModel()
         {
+            webSocketClient = new WebSocketClient();
+            webSocketClient.Connect("ws://localhost/test");
+
+            webSocketClient.onMessage = new Action<string>(receiveMessage);
+
             os = new OrderSystem();
             os.StartWorkDay();
 
             this._dispatcher = Dispatcher.CurrentDispatcher;
-            this.ListViewPizzas = (List<PizzaDTO>)os.GetAllPizzasDTO();   
+            webSocketClient.RequestPizza();
+            //this.ListViewPizzas = (List<PizzaDTO>)os.GetAllPizzasDTO();   
+            this.ListViewPizzas = new ObservableCollection<PizzaDTO>();
             this.AddToCartCommand = new RelayCommand(param => AddToCart(), null);
             this.DeleteFromCartCommand = new RelayCommand(param => DeleteFromCart(), null);
             this.OrderPizzaCommand = new RelayCommand(param => OrderPizza(), null);
@@ -52,7 +62,29 @@ namespace GUI.ViewModels
 
         #region Methods
 
-   
+        public void receiveMessage(string message)
+        {
+            RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(message);
+            Console.WriteLine("Klient otrzymał: " + request.Tag);
+            string outp = String.Empty;
+            switch (request.Tag)
+            {
+                case "order":
+                    Console.WriteLine("Order Success");
+                    break;
+                case "pizzas":
+                    ResponsePizzaList responsePizzaList = JsonConvert.DeserializeObject<ResponsePizzaList>(message);
+                    foreach(PizzaDTO pizza in responsePizzaList.pizzas)
+                    {
+                        ListViewPizzas.Add(pizza);
+                    }
+                    break;
+                case "subscription":
+                    Console.WriteLine("Subscription Success");
+                    break;
+            }
+        }
+
         public void AddToCart()
         {
             cart.Add(selectedPizza);
@@ -89,6 +121,7 @@ namespace GUI.ViewModels
             }
 
             os.OrderPizza(pizzasToOrder, customerDTO);
+            webSocketClient.RequestOrder(pizzasToOrder, customerDTO);
 
             MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -110,6 +143,7 @@ namespace GUI.ViewModels
             }
 
             os.SubscribeToPromotion(customerDTO);
+            webSocketClient.RequestSubscription(customerDTO);
 
             MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
         }

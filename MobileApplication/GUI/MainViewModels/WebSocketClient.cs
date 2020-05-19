@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Logic.DTO;
+using Logic.Requests;
+using Newtonsoft.Json;
 
-namespace Communication
+namespace GUI.ViewModels
 {
     public class WebSocketClient
     {
         private UTF8Encoding encoding = new UTF8Encoding();
         private ClientWebSocket webSocket = null;
-        string message; 
+        string message;
+        public Action<string> onMessage;
 
         public async Task Connect(string uri)
         {
@@ -48,10 +53,26 @@ namespace Communication
                 Console.WriteLine("Sent:     " + stringToSend);
             }
         }
-
+        
         public void RequestPizza()
         {
-            Send("pizza");
+            RequestWeb request = new RequestWeb("pizzas");
+            string json = JsonConvert.SerializeObject(request, Formatting.Indented);
+            Send(json);
+        }
+       
+        public void RequestSubscription(CustomerDTO customerDTO)
+        {
+            RequestWeb request = new RequestCustomerSubscription("subscription", customerDTO);
+            string json = JsonConvert.SerializeObject(request, Formatting.Indented);
+            Send(json);
+        }
+
+        public void RequestOrder(List<PizzaDTO> pizzasDTO, CustomerDTO customerDTO)
+        {
+            RequestWeb request = new RequestPizzaOrder("order", customerDTO, pizzasDTO);
+            string json = JsonConvert.SerializeObject(request, Formatting.Indented);
+            Send(json);
         }
 
         private async Task Receive()
@@ -70,6 +91,7 @@ namespace Communication
                 {
                     message = Encoding.UTF8.GetString(buffer).TrimEnd('\0');
                     Console.WriteLine("Received:   " + message);
+                    onMessage(message);
                 }
             }
         }

@@ -21,11 +21,9 @@ namespace GUI.ViewModels
         public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
         public PizzaDTO selectedCart { get; set; }
         public string customerName { get; set; }
-        private OrderSystem os;
+        //private OrderSystem os;
         private WebSocketClient webSocketClient;
-
-
-   
+        
         #endregion
 
         #region RelayCommands
@@ -45,8 +43,8 @@ namespace GUI.ViewModels
 
             webSocketClient.onMessage = new Action<string>(receiveMessage);
 
-            os = new OrderSystem();
-            os.StartWorkDay();
+            //os = new OrderSystem();
+            //os.StartWorkDay();
 
             this._dispatcher = Dispatcher.CurrentDispatcher;
             webSocketClient.RequestPizza();
@@ -70,7 +68,14 @@ namespace GUI.ViewModels
             switch (request.Tag)
             {
                 case "order":
-                    Console.WriteLine("Order Success");
+                    if (request.Status == RequestStatus.SUCCESS)
+                    {
+                        MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                     break;
                 case "pizzas":
                     ResponsePizzaList responsePizzaList = JsonConvert.DeserializeObject<ResponsePizzaList>(message);
@@ -80,7 +85,14 @@ namespace GUI.ViewModels
                     }
                     break;
                 case "subscription":
-                    Console.WriteLine("Subscription Success");
+                    if (request.Status == RequestStatus.SUCCESS)
+                    {
+                        MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                     break;
             }
         }
@@ -106,12 +118,16 @@ namespace GUI.ViewModels
                 return;
             }
 
-            CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
-            if(customerDTO == null)
-            {
-                MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+
+            //CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
+            CustomerDTO customerDTO = new CustomerDTO();
+            customerDTO.name = customerName;
+
+            //if(customerDTO == null)
+            //{
+            //    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    return;
+            //}
 
             List<PizzaDTO> pizzasToOrder = new List<PizzaDTO>(cart);
             if(pizzasToOrder.Count == 0)
@@ -120,11 +136,10 @@ namespace GUI.ViewModels
                 return;
             }
 
-            os.OrderPizza(pizzasToOrder, customerDTO);
+            //os.OrderPizza(pizzasToOrder, customerDTO);
             webSocketClient.RequestOrder(pizzasToOrder, customerDTO);
 
-            MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
+            //MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void Subscribe()
@@ -135,17 +150,20 @@ namespace GUI.ViewModels
                 return;
             }
 
-            CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
-            if (customerDTO == null)
-            {
-                MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika. Wpisz ją w lewym dolnym rogu ekranu.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            //CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
+            //if (customerDTO == null)
+            //{
+            //    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika. Wpisz ją w lewym dolnym rogu ekranu.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    return;
+            //}
 
-            os.SubscribeToPromotion(customerDTO);
+            CustomerDTO customerDTO = new CustomerDTO();
+            customerDTO.name = customerName;
+
+            //os.SubscribeToPromotion(customerDTO);
             webSocketClient.RequestSubscription(customerDTO);
 
-            MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         #endregion

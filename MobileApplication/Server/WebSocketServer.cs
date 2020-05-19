@@ -63,8 +63,13 @@ namespace Server
 
         private string ProcessOrderRequest(RequestPizzaOrder request)
         {
-            os.OrderPizza(request.pizzas, request.customer);
+            CustomerDTO customerDTO = os.GetCustomerDTO(request.customer.name);
             RequestWeb response = new RequestWeb("order");
+            if (customerDTO == null)
+            {
+                response.Status = RequestStatus.FAIL;
+            }
+            os.OrderPizza(request.pizzas, request.customer);
             string json = JsonConvert.SerializeObject(response, Formatting.Indented);
             return json;
         }
@@ -79,8 +84,14 @@ namespace Server
 
         private string ProcessSubscriptionRequest(RequestCustomerSubscription request)
         {
+            CustomerDTO customerDTO = os.GetCustomerDTO(request.customer.name);
+            RequestWeb response = new RequestWeb("order");
+            if (customerDTO == null)
+            {
+                response.Status = RequestStatus.FAIL;
+            }
             os.SubscribeToPromotion(request.customer);
-            RequestWeb response = new RequestWeb("subscription");
+            response = new RequestWeb("subscription");
             string json = JsonConvert.SerializeObject(response, Formatting.Indented);
             return json;
         }

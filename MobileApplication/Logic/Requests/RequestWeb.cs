@@ -8,6 +8,8 @@ namespace Logic.Requests
     {
         [JsonProperty("tag")]
         public string Tag { get; set; }
+        [JsonProperty("status")]
+        public RequestStatus Status = RequestStatus.SUCCESS;
         public RequestWeb(string tag)
         {
             Tag = tag;

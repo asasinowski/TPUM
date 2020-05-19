@@ -7,8 +7,7 @@ namespace Server
         static void Main(string[] args)
         {
             WebSocketServer webSocketServer = new WebSocketServer();
-            webSocketServer.Start("http://localhost:80/test/");
-            Console.WriteLine("Press any key to exit...");
+            webSocketServer.Start("http://localhost:80/pizzeria/");
             Console.ReadKey();
         }
     }

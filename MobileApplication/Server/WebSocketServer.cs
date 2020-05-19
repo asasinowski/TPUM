@@ -14,14 +14,14 @@ namespace Server
 {
     public class WebSocketServer
     {
-        OrderSystem os;
+        private OrderSystem os;
 
         public async void Start(string httpListenerPrefix)
         {
             HttpListener httpListener = new HttpListener();
             httpListener.Prefixes.Add(httpListenerPrefix);
             httpListener.Start();
-            Console.WriteLine("Server listening...");
+            Console.WriteLine("[{0}] Server nasłuchuje...", DateTime.Now.ToString("HH:mm:ss.fff"));
 
             os = new OrderSystem();
             os.StartWorkDay();
@@ -36,10 +36,10 @@ namespace Server
             }
         }
 
-        private string ProcessData(string inp)
+        private string ProcessData(string inp, string ipAddress)
         {
-            Console.WriteLine("Serwer otrzymał: " + inp);
             RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(inp);
+            Console.WriteLine("[{0}] Serwer otrzymał zapytanie: \"{1}\" od {2}, status: {3}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag, ipAddress, request.Status);
 
             string output = String.Empty;
             switch (request.Tag)
@@ -57,7 +57,6 @@ namespace Server
                     break;
             }
 
-            Console.WriteLine("Output: " + output);
             return output;
         }
 
@@ -65,12 +64,15 @@ namespace Server
         {
             CustomerDTO customerDTO = os.GetCustomerDTO(request.customer.name);
             RequestWeb response = new RequestWeb("order");
+            string json;
             if (customerDTO == null)
             {
                 response.Status = RequestStatus.FAIL;
+                json = JsonConvert.SerializeObject(response, Formatting.Indented);
+                return json;
             }
             os.OrderPizza(request.pizzas, request.customer);
-            string json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            json = JsonConvert.SerializeObject(response, Formatting.Indented);
             return json;
         }
 
@@ -86,25 +88,28 @@ namespace Server
         {
             CustomerDTO customerDTO = os.GetCustomerDTO(request.customer.name);
             RequestWeb response = new RequestWeb("order");
+            string json;
             if (customerDTO == null)
             {
                 response.Status = RequestStatus.FAIL;
+                json = JsonConvert.SerializeObject(response, Formatting.Indented);
+                return json;
             }
             os.SubscribeToPromotion(request.customer);
             response = new RequestWeb("subscription");
-            string json = JsonConvert.SerializeObject(response, Formatting.Indented);
+            json = JsonConvert.SerializeObject(response, Formatting.Indented);
             return json;
         }
 
         private async void ProcessRequest(HttpListenerContext httpListenerContext)
         {
             WebSocketContext webSocketContext = null;
-
+            string ipAddress = string.Empty;
             try
             {
                 webSocketContext = await httpListenerContext.AcceptWebSocketAsync(subProtocol: null);
-                string ipAddress = httpListenerContext.Request.RemoteEndPoint.Address.ToString();
-                Console.WriteLine("Connected: IPAdress: {0}", ipAddress);
+                ipAddress = httpListenerContext.Request.RemoteEndPoint.Address.ToString();
+                Console.WriteLine("[{0}] Połączono z IPAdress: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), ipAddress);
             }
             catch (Exception e)
             {
@@ -131,7 +136,7 @@ namespace Server
                     }
                     else
                     {
-                        string response = ProcessData(Encoding.UTF8.GetString(receiveBuffer).TrimEnd('\0'));
+                        string response = ProcessData(Encoding.UTF8.GetString(receiveBuffer).TrimEnd('\0'), ipAddress);
                         ArraySegment<byte> outb = new ArraySegment<byte>(Encoding.UTF8.GetBytes(response));
                         await webSocket.SendAsync(outb, WebSocketMessageType.Binary, receiveResult.EndOfMessage, CancellationToken.None);
                     }

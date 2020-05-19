@@ -48,9 +48,7 @@ namespace GUI.ViewModels
             if (webSocket.State == WebSocketState.Open)
             {             
                 byte[] buffer = encoding.GetBytes(stringToSend);
-
                 webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Binary, false, CancellationToken.None);
-                Console.WriteLine("Sent:     " + stringToSend);
             }
         }
         
@@ -59,6 +57,8 @@ namespace GUI.ViewModels
             RequestWeb request = new RequestWeb("pizzas");
             string json = JsonConvert.SerializeObject(request, Formatting.Indented);
             Send(json);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("[{0}] Klient wysłał zapytanie: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag);
         }
        
         public void RequestSubscription(CustomerDTO customerDTO)
@@ -66,6 +66,8 @@ namespace GUI.ViewModels
             RequestWeb request = new RequestCustomerSubscription("subscription", customerDTO);
             string json = JsonConvert.SerializeObject(request, Formatting.Indented);
             Send(json);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("[{0}] Klient wysłał zapytanie: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag);
         }
 
         public void RequestOrder(List<PizzaDTO> pizzasDTO, CustomerDTO customerDTO)
@@ -73,6 +75,8 @@ namespace GUI.ViewModels
             RequestWeb request = new RequestPizzaOrder("order", customerDTO, pizzasDTO);
             string json = JsonConvert.SerializeObject(request, Formatting.Indented);
             Send(json);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("[{0}] Klient wysłał zapytanie: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag);
         }
 
         private async Task Receive()
@@ -90,7 +94,6 @@ namespace GUI.ViewModels
                 else
                 {
                     message = Encoding.UTF8.GetString(buffer).TrimEnd('\0');
-                    Console.WriteLine("Received:   " + message);
                     onMessage(message);
                 }
             }

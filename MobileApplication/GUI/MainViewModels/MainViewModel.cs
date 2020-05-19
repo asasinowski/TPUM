@@ -1,5 +1,4 @@
-﻿using Logic;
-using Logic.DTO;
+﻿using Logic.DTO;
 using Logic.Requests;
 using Newtonsoft.Json;
 using System;
@@ -21,7 +20,6 @@ namespace GUI.ViewModels
         public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
         public PizzaDTO selectedCart { get; set; }
         public string customerName { get; set; }
-        //private OrderSystem os;
         private WebSocketClient webSocketClient;
         
         #endregion
@@ -39,16 +37,12 @@ namespace GUI.ViewModels
         public MainViewModel()
         {
             webSocketClient = new WebSocketClient();
-            webSocketClient.Connect("ws://localhost/test");
+            webSocketClient.Connect("ws://localhost/pizzeria/");
 
             webSocketClient.onMessage = new Action<string>(receiveMessage);
 
-            //os = new OrderSystem();
-            //os.StartWorkDay();
-
             this._dispatcher = Dispatcher.CurrentDispatcher;
             webSocketClient.RequestPizza();
-            //this.ListViewPizzas = (List<PizzaDTO>)os.GetAllPizzasDTO();   
             this.ListViewPizzas = new ObservableCollection<PizzaDTO>();
             this.AddToCartCommand = new RelayCommand(param => AddToCart(), null);
             this.DeleteFromCartCommand = new RelayCommand(param => DeleteFromCart(), null);
@@ -63,7 +57,8 @@ namespace GUI.ViewModels
         public void receiveMessage(string message)
         {
             RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(message);
-            Console.WriteLine("Klient otrzymał: " + request.Tag);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("[{0}] Klient otrzymał odpowiedź: {1} , status: {2}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag, request.Status);
             string outp = String.Empty;
             switch (request.Tag)
             {
@@ -118,16 +113,8 @@ namespace GUI.ViewModels
                 return;
             }
 
-
-            //CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.name = customerName;
-
-            //if(customerDTO == null)
-            //{
-            //    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
 
             List<PizzaDTO> pizzasToOrder = new List<PizzaDTO>(cart);
             if(pizzasToOrder.Count == 0)
@@ -135,11 +122,7 @@ namespace GUI.ViewModels
                 MessageBoxResult noCustomer = MessageBox.Show("Nie wybrano pizzy.", "Nie wybrano pizzy.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            //os.OrderPizza(pizzasToOrder, customerDTO);
             webSocketClient.RequestOrder(pizzasToOrder, customerDTO);
-
-            //MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void Subscribe()
@@ -150,20 +133,10 @@ namespace GUI.ViewModels
                 return;
             }
 
-            //CustomerDTO customerDTO = os.GetCustomerDTO(customerName);
-            //if (customerDTO == null)
-            //{
-            //    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika. Wpisz ją w lewym dolnym rogu ekranu.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.name = customerName;
 
-            //os.SubscribeToPromotion(customerDTO);
             webSocketClient.RequestSubscription(customerDTO);
-
-            //MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         #endregion

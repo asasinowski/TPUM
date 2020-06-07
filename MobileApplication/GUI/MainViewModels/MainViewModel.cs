@@ -1,5 +1,6 @@
 ﻿using ConnectionDependencies.DTO;
 using ConnectionDependencies.Requests;
+using LogicClient;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace GUI.ViewModels
         #region Properties
 
         private readonly Dispatcher _dispatcher;
-
+        public SystemController systemController;
         public ObservableCollection<PizzaDTO> ListViewPizzas { get; set; }
         public PizzaDTO selectedPizza { get; set; }
         public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
@@ -22,6 +23,10 @@ namespace GUI.ViewModels
         public string customerName { get; set; }
         private WebSocketClient webSocketClient;
         
+        //public PizzaOTD selectedPizza { get; set; }
+        //public PizzaOTD selectedCart { get; set; }
+
+
         #endregion
 
         #region RelayCommands
@@ -36,14 +41,16 @@ namespace GUI.ViewModels
 
         public MainViewModel()
         {
+            systemController = new SystemController();
             webSocketClient = new WebSocketClient();
             webSocketClient.Connect("ws://localhost/pizzeria/");
 
             webSocketClient.onMessage = new Action<string>(receiveMessage);
 
             this._dispatcher = Dispatcher.CurrentDispatcher;
-            webSocketClient.RequestPizza();
-            this.ListViewPizzas = new ObservableCollection<PizzaDTO>();
+            systemController.RequestListOfPizzas();
+            //webSocketClient.RequestPizza();
+            //this.ListViewPizzas = new ObservableCollection<PizzaDTO>();
             this.AddToCartCommand = new RelayCommand(param => AddToCart(), null);
             this.DeleteFromCartCommand = new RelayCommand(param => DeleteFromCart(), null);
             this.OrderPizzaCommand = new RelayCommand(param => OrderPizza(), null);
@@ -54,6 +61,7 @@ namespace GUI.ViewModels
 
         #region Methods
 
+        
         public void receiveMessage(string message)
         {
             RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(message);
@@ -104,7 +112,7 @@ namespace GUI.ViewModels
                 cart.Remove(selectedCart);
             }
         }
-
+        
         public void OrderPizza()
         {
             if(string.IsNullOrEmpty(customerName))
@@ -138,7 +146,7 @@ namespace GUI.ViewModels
 
             webSocketClient.RequestSubscription(customerDTO);
         }
-
+        
         #endregion
     }
 }

@@ -108,9 +108,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logic\Logic.csproj">
-      <Project>{A11E0051-8B22-498F-BE69-0B516168229D}</Project>
-      <Name>Logic</Name>
+    <ProjectReference Include="..\ConnectionDependencies\ConnectionDependencies.csproj">
+      <Project>{e14d4dfa-a797-435e-8e04-e836840ee939}</Project>
+      <Name>ConnectionDependencies</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

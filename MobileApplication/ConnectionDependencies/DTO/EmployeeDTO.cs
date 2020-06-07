@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Logic.DTO
+namespace ConnectionDependencies.DTO
 {
     [DataContract]
     public class EmployeeDTO

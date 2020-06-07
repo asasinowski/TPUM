@@ -4,8 +4,8 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Logic.DTO;
-using Logic.Requests;
+using ConnectionDependencies.DTO;
+using ConnectionDependencies.Requests;
 using Newtonsoft.Json;
 
 namespace GUI.ViewModels

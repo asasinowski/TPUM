@@ -8,9 +8,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ConnectionDependencies\ConnectionDependencies.csproj" />
-    <ProjectReference Include="..\Data\Data.csproj" />
-  </ItemGroup>
-
 </Project>

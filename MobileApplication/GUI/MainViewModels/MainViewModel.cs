@@ -1,5 +1,5 @@
-﻿using Logic.DTO;
-using Logic.Requests;
+﻿using ConnectionDependencies.DTO;
+using ConnectionDependencies.Requests;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

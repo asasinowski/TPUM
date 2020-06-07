@@ -18,5 +18,10 @@ namespace LogicClient
             IDataFiller filler = new DataFactory();
             this.repository = new Repository(filler);
         }
+
+        public void RequestListOfPizzas()
+        {
+            webSocketController.
+        }
     }
 }

@@ -16,17 +16,15 @@ namespace GUI.ViewModels
 
         private readonly Dispatcher _dispatcher;
         public SystemController systemController;
+
         public ObservableCollection<PizzaDTO> ListViewPizzas { get; set; }
         public PizzaDTO selectedPizza { get; set; }
         public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
         public PizzaDTO selectedCart { get; set; }
         public string customerName { get; set; }
-        private WebSocketClient webSocketClient;
+        //private WebSocketClient webSocketClient;
         
-        //public PizzaOTD selectedPizza { get; set; }
-        //public PizzaOTD selectedCart { get; set; }
-
-
+        
         #endregion
 
         #region RelayCommands
@@ -42,15 +40,17 @@ namespace GUI.ViewModels
         public MainViewModel()
         {
             systemController = new SystemController();
-            webSocketClient = new WebSocketClient();
-            webSocketClient.Connect("ws://localhost/pizzeria/");
+            //webSocketClient = new WebSocketClient();
+            //webSocketClient.Connect("ws://localhost/pizzeria/");
 
-            webSocketClient.onMessage = new Action<string>(receiveMessage);
+            systemController.onProcess = new Action<string>(receiveMessage);
 
             this._dispatcher = Dispatcher.CurrentDispatcher;
             systemController.RequestListOfPizzas();
             //webSocketClient.RequestPizza();
             //this.ListViewPizzas = new ObservableCollection<PizzaDTO>();
+
+            this.ListViewPizzas = systemController.GetListViewPizza();
             this.AddToCartCommand = new RelayCommand(param => AddToCart(), null);
             this.DeleteFromCartCommand = new RelayCommand(param => DeleteFromCart(), null);
             this.OrderPizzaCommand = new RelayCommand(param => OrderPizza(), null);
@@ -64,38 +64,23 @@ namespace GUI.ViewModels
         
         public void receiveMessage(string message)
         {
-            RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(message);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[{0}] Klient otrzymał odpowiedź: {1} , status: {2}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag, request.Status);
-            string outp = String.Empty;
-            switch (request.Tag)
+            //RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(message);
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("[{0}] Klient otrzymał odpowiedź: {1} , status: {2}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag, request.Status);
+            //string outp = String.Empty;
+            switch (message)
             {
-                case "order":
-                    if (request.Status == RequestStatus.SUCCESS)
-                    {
-                        MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
+                case "ORDER SUCCESSFUL - 200":
+                    MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
                     break;
-                case "pizzas":
-                    ResponsePizzaList responsePizzaList = JsonConvert.DeserializeObject<ResponsePizzaList>(message);
-                    foreach(PizzaDTO pizza in responsePizzaList.pizzas)
-                    {
-                        ListViewPizzas.Add(pizza);
-                    }
+                case "ORDER FAILED - 404":
+                    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     break;
-                case "subscription":
-                    if (request.Status == RequestStatus.SUCCESS)
-                    {
-                        MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
+                case "SUBSCRIPTION SUCCESSFUL - 200":
+                    MessageBoxResult successSub = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    break;
+                case "SUBSCRIPTION FAILED - 404":
+                    MessageBoxResult noCustomerSub = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     break;
             }
         }
@@ -130,7 +115,8 @@ namespace GUI.ViewModels
                 MessageBoxResult noCustomer = MessageBox.Show("Nie wybrano pizzy.", "Nie wybrano pizzy.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            webSocketClient.RequestOrder(pizzasToOrder, customerDTO);
+
+            systemController.RequestOrder(pizzasToOrder, customerDTO);
         }
 
         public void Subscribe()
@@ -144,7 +130,7 @@ namespace GUI.ViewModels
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.name = customerName;
 
-            webSocketClient.RequestSubscription(customerDTO);
+            systemController.RequestSubscription(customerDTO);
         }
         
         #endregion

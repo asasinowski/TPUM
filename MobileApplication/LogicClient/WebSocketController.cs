@@ -12,11 +12,11 @@ namespace LogicClient
         public WebSocketClient webSocketClient { get; set; }
         public string URI = "ws://localhost/pizzeria/";
         public Repository repository;
-        public Action<string> onMessage;
-
+        public Action<string> onStatus;
 
         public WebSocketController(Repository repository)
         {
+            this.repository = repository;
             webSocketClient = new WebSocketClient();
             webSocketClient.Connect(URI);
 
@@ -32,14 +32,16 @@ namespace LogicClient
             switch (request.Tag)
             {
                 case "order":
-                    //if (request.Status == RequestStatus.SUCCESS)
-                    //{
-                    //    MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
-                    //}
-                    //else
-                    //{
-                    //    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    //}
+                    if (request.Status == RequestStatus.SUCCESS)
+                    {
+                        //MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
+                        onStatus("ORDER SUCCESSFUL - 200");
+                    }
+                    else
+                    {
+                        onStatus("ORDER FAILED - 404");
+                        //MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                     break;
                 case "pizzas":
                     ResponsePizzaList responsePizzaList = JsonConvert.DeserializeObject<ResponsePizzaList>(message);
@@ -51,14 +53,16 @@ namespace LogicClient
                     }
                     break;
                 case "subscription":
-                    //if (request.Status == RequestStatus.SUCCESS)
-                    //{
-                    //    MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
-                    //}
-                    //else
-                    //{
-                    //    MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    //}
+                    if (request.Status == RequestStatus.SUCCESS)
+                    {
+                        onStatus("SUBSCRIPTION SUCCESSFUL - 200");
+                        //    MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        onStatus("SUBSCRIPTION FAILED - 404");
+                        //MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                     break;
             }
         }

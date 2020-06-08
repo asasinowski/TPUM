@@ -1,7 +1,5 @@
 ﻿using ConnectionDependencies.DTO;
-using ConnectionDependencies.Requests;
 using LogicClient;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,7 +20,6 @@ namespace GUI.ViewModels
         public ObservableCollection<PizzaDTO> cart { get; set; } = new ObservableCollection<PizzaDTO>();
         public PizzaDTO selectedCart { get; set; }
         public string customerName { get; set; }
-        //private WebSocketClient webSocketClient;
         
         
         #endregion
@@ -40,15 +37,10 @@ namespace GUI.ViewModels
         public MainViewModel()
         {
             systemController = new SystemController();
-            //webSocketClient = new WebSocketClient();
-            //webSocketClient.Connect("ws://localhost/pizzeria/");
-
             systemController.onProcess = new Action<string>(receiveMessage);
 
             this._dispatcher = Dispatcher.CurrentDispatcher;
             systemController.RequestListOfPizzas();
-            //webSocketClient.RequestPizza();
-            //this.ListViewPizzas = new ObservableCollection<PizzaDTO>();
 
             this.ListViewPizzas = systemController.GetListViewPizza();
             this.AddToCartCommand = new RelayCommand(param => AddToCart(), null);
@@ -64,10 +56,6 @@ namespace GUI.ViewModels
         
         public void receiveMessage(string message)
         {
-            //RequestWeb request = JsonConvert.DeserializeObject<RequestWeb>(message);
-            //Console.ForegroundColor = ConsoleColor.Green;
-            //Console.WriteLine("[{0}] Klient otrzymał odpowiedź: {1} , status: {2}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag, request.Status);
-            //string outp = String.Empty;
             switch (message)
             {
                 case "ORDER SUCCESSFUL - 200":

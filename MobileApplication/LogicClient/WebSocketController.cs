@@ -34,14 +34,12 @@ namespace LogicClient
                 case "order":
                     if (request.Status == RequestStatus.SUCCESS)
                     {
-                        //MessageBoxResult success = MessageBox.Show("Zamówienie udane, prosimy czekać na zamówienie.", "Zamówienie udane.", MessageBoxButton.OK, MessageBoxImage.Information);
-                        onStatus("ORDER SUCCESSFUL - 200");
+                       onStatus("ORDER SUCCESSFUL - 200");
                     }
                     else
                     {
                         onStatus("ORDER FAILED - 404");
-                        //MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
+                   }
                     break;
                 case "pizzas":
                     ResponsePizzaList responsePizzaList = JsonConvert.DeserializeObject<ResponsePizzaList>(message);
@@ -49,24 +47,19 @@ namespace LogicClient
                     foreach (PizzaDTO pizza in responsePizzaList.pizzas)
                     {
                         repository.AddToListViewPizzas(pizza);
-                        //ListViewPizzas.Add(pizza);
                     }
                     break;
                 case "subscription":
                     if (request.Status == RequestStatus.SUCCESS)
                     {
                         onStatus("SUBSCRIPTION SUCCESSFUL - 200");
-                        //    MessageBoxResult success = MessageBox.Show("Drogi kliencie, od teraz będziesz dostawał powiadomienia o super okazjach w naszej pizzerii.", "Subskrybujesz naszą pizzerię.", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
                         onStatus("SUBSCRIPTION FAILED - 404");
-                        //MessageBoxResult noCustomer = MessageBox.Show("Nie ma takiego użytkownika.", "Nie ma takiego użytkownika.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     break;
             }
         }
-
-
     }
 }

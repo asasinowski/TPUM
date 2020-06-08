@@ -35,18 +35,5 @@ namespace DataClient
         {
             data.customerName = updatedCustomerName;
         }
-
-        public void AddToCart(PizzaDTO selectedPizza)
-        {
-            data.cart.Add(selectedPizza);
-        }
-
-        public void DeleteFromCart(PizzaDTO selectedCart)
-        {
-            if (data.cart.Contains(selectedCart))
-            {
-                data.cart.Remove(selectedCart);
-            }
-        }
     }
 }

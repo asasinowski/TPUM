@@ -1,6 +1,5 @@
 ﻿using ConnectionDependencies.DTO;
 using DataClient;
-using LogicClient.OTD;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

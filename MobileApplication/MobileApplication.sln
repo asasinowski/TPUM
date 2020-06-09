@@ -13,7 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{8DB0AD00-B712-4B38-B56E-18E6C1AC1DFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionDependencies", "ConnectionDependencies\ConnectionDependencies.csproj", "{E14D4DFA-A797-435E-8E04-E836840EE939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionDependencies", "ConnectionDependencies\ConnectionDependencies.csproj", "{E14D4DFA-A797-435E-8E04-E836840EE939}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataClient", "DataClient\DataClient.csproj", "{3585B52B-43F2-4E90-AD5A-1A3CB0DADA17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicClient", "LogicClient\LogicClient.csproj", "{C1274290-7230-4150-B47F-56D22870A364}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{E14D4DFA-A797-435E-8E04-E836840EE939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E14D4DFA-A797-435E-8E04-E836840EE939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E14D4DFA-A797-435E-8E04-E836840EE939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3585B52B-43F2-4E90-AD5A-1A3CB0DADA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3585B52B-43F2-4E90-AD5A-1A3CB0DADA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3585B52B-43F2-4E90-AD5A-1A3CB0DADA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3585B52B-43F2-4E90-AD5A-1A3CB0DADA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1274290-7230-4150-B47F-56D22870A364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1274290-7230-4150-B47F-56D22870A364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1274290-7230-4150-B47F-56D22870A364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1274290-7230-4150-B47F-56D22870A364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

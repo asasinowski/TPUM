@@ -74,7 +74,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainViewModels\WebSocketClient.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -109,8 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConnectionDependencies\ConnectionDependencies.csproj">
-      <Project>{e14d4dfa-a797-435e-8e04-e836840ee939}</Project>
+      <Project>{E14D4DFA-A797-435E-8E04-E836840EE939}</Project>
       <Name>ConnectionDependencies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogicClient\LogicClient.csproj">
+      <Project>{C1274290-7230-4150-B47F-56D22870A364}</Project>
+      <Name>LogicClient</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

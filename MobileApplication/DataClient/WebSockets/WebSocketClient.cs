@@ -8,7 +8,7 @@ using ConnectionDependencies.DTO;
 using ConnectionDependencies.Requests;
 using Newtonsoft.Json;
 
-namespace GUI.ViewModels
+namespace DataClient.WebSockets
 {
     public class WebSocketClient
     {
@@ -46,12 +46,12 @@ namespace GUI.ViewModels
         private void Send(string stringToSend)
         {
             if (webSocket.State == WebSocketState.Open)
-            {             
+            {
                 byte[] buffer = encoding.GetBytes(stringToSend);
                 webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Binary, false, CancellationToken.None);
             }
         }
-        
+
         public void RequestPizza()
         {
             RequestWeb request = new RequestWeb("pizzas");
@@ -60,7 +60,7 @@ namespace GUI.ViewModels
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[{0}] Klient wysłał zapytanie: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), request.Tag);
         }
-       
+
         public void RequestSubscription(CustomerDTO customerDTO)
         {
             RequestWeb request = new RequestCustomerSubscription("subscription", customerDTO);

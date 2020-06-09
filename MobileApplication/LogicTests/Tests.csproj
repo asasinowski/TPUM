@@ -68,18 +68,35 @@
   <ItemGroup>
     <Compile Include="DataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConnectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConnectionDependencies\ConnectionDependencies.csproj">
+      <Project>{E14D4DFA-A797-435E-8E04-E836840EE939}</Project>
+      <Name>ConnectionDependencies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataClient\DataClient.csproj">
+      <Project>{3585B52B-43F2-4E90-AD5A-1A3CB0DADA17}</Project>
+      <Name>DataClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Data\Data.csproj">
       <Project>{ACD8F8AE-561E-42E6-BB09-A10DDF3E0451}</Project>
       <Name>Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogicClient\LogicClient.csproj">
+      <Project>{C1274290-7230-4150-B47F-56D22870A364}</Project>
+      <Name>LogicClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{A11E0051-8B22-498F-BE69-0B516168229D}</Project>
       <Name>Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server\Server.csproj">
+      <Project>{8DB0AD00-B712-4B38-B56E-18E6C1AC1DFE}</Project>
+      <Name>Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

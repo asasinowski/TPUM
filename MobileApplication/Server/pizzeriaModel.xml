@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="OPCFModelDesign.xslt"?>
-<ModelDesign xmlns:OpcPizza="http://opcfoundation.org/UA/Pizzeria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:OpcUa="http://opcfoundation.org/UA/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
+<ModelDesign xmlns:OpcReq="http://opcfoundation.org/UA/Req" xmlns:OpcPizza="http://opcfoundation.org/UA/Pizzeria" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:OpcUa="http://opcfoundation.org/UA/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
   <Namespaces>
     <Namespace Name="OpcUa" Prefix="Opc.Ua" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd" XmlPrefix="Opc.Ua">http://opcfoundation.org/UA/</Namespace>
     <Namespace Name="OpcPizza" Prefix="Opc.Pizza" XmlNamespace="http://opcfoundation.org/UA/Pizzeria/Types.xsd" XmlPrefix="Opc.Pizza">http://opcfoundation.org/UA/Pizzeria</Namespace>
+    <Namespace Name="OpcReq" Prefix="Opc.Req" XmlNamespace="http://opcfoundation.org/UA/Req/Types.xsd" XmlPrefix="Opc.Req">http://opcfoundation.org/UA/Req</Namespace>
   </Namespaces>
   <ObjectType SymbolicName="OpcPizza:PizzaType" StringId="" BaseType="OpcUa:BaseObjectType">
     <BrowseName>PizzaType</BrowseName>
@@ -75,6 +76,43 @@
       </Property>
       <Property SymbolicName="OpcPizza:realizationTime" DataType="OpcUa:Int32" ValueRank="Scalar">
         <Description>Przewidywany czas zamówienia</Description>
+      </Property>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="OpcReq:RequestStatusType" BaseType="OpcUa:Enumeration">
+    <Description>Typ wyliczeniowy żądania</Description>
+  </ObjectType>
+  <ObjectType SymbolicName="OpcReq:RequestWebType" BaseType="OpcUa:BaseObjectType">
+    <Description>Typ klasy bazowej żądania</Description>
+    <Children>
+      <Property SymbolicName="OpcReq:Tag" DataType="OpcUa:String" ValueRank="Scalar" />
+      <Property SymbolicName="OpcReq:Status" DataType="OpcReq:RequestStatus" ValueRank="Scalar" />
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="OpcReq:RequestCustomerSubscriptionType" BaseType="OpcReq:RequestWebType">
+    <Description>Typ żądania subskrypcji</Description>
+    <Children>
+      <Property SymbolicName="OpcPizza:customer" DataType="OpcPizza:CustomerType" ValueRank="Scalar">
+        <Description>Klient, który chce zasubskrybować</Description>
+      </Property>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="OpcReq:RequestPizzaOrderType" BaseType="OpcReq:RequestWebType">
+    <Description>Typ żądania zamówienia</Description>
+    <Children>
+      <Property SymbolicName="OpcPizza:pizzas" DataType="OpcPizza:PizzaType" ValueRank="Array" ArrayDimensions="1">
+        <Description>Zamówione pizze</Description>
+      </Property>
+      <Property SymbolicName="OpcPizza:customer" DataType="OpcPizza:CustomerType" ValueRank="Scalar">
+        <Description>Zamawiający klient</Description>
+      </Property>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="OpcReq:ResponsePizzaListType" BaseType="OpcReq:RequestWebType">
+    <Description>Odpowiedź z pizzami</Description>
+    <Children>
+      <Property SymbolicName="OpcPizza:pizzas" DataType="OpcPizza:PizzaType" ValueRank="Array" ArrayDimensions="1">
+        <Description>Zamówione pizze</Description>
       </Property>
     </Children>
   </ObjectType>

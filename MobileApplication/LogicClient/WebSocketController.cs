@@ -48,6 +48,7 @@ namespace LogicClient
                     {
                         repository.AddToListViewPizzas(pizza);
                     }
+                    onStatus("PIZZAS RECEIVED");
                     break;
                 case "subscription":
                     if (request.Status == RequestStatus.SUCCESS)

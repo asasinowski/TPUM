@@ -7,6 +7,7 @@ using Server;
 using LogicClient;
 using System.Threading;
 using ConnectionDependencies.DTO;
+using System.Diagnostics;
 
 namespace Tests
 {
@@ -14,6 +15,7 @@ namespace Tests
     public class ConnectionTests
     {
         bool resultTest = true;
+        bool gotResponse = false;
 
         [TestMethod]
         public void GetListOfPizzasFromServerTest()
@@ -24,10 +26,19 @@ namespace Tests
 
             // Klient
             SystemController systemController = new SystemController();
+            systemController.onProcess = new Action<string>(ReceiveMessage);
 
-            Thread.Sleep(2000);
+            while (!systemController.webSocketController.webSocketClient.CheckConnectionStatus())
+            {
+
+            }
+
             systemController.RequestListOfPizzas();
-            Thread.Sleep(200);
+            while (!gotResponse)
+            {
+
+            }
+            gotResponse = false;
             int NumberOfPizzas = systemController.repository.GetListViewPizzas().Count;
             Assert.AreEqual(15, NumberOfPizzas);
         }
@@ -43,10 +54,17 @@ namespace Tests
             SystemController systemController = new SystemController();
             systemController.onProcess = new Action<string>(ReceiveMessage);
 
-            Thread.Sleep(2000);
-            systemController.RequestListOfPizzas();
-            Thread.Sleep(200);
+            while (!systemController.webSocketController.webSocketClient.CheckConnectionStatus())
+            {
 
+            }
+
+            systemController.RequestListOfPizzas();
+            while (!gotResponse)
+            {
+
+            }
+            gotResponse = false;
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.name = "Andrzej";
 
@@ -54,13 +72,21 @@ namespace Tests
             List<PizzaDTO> pizzasToOrder = new List<PizzaDTO>();
             pizzasToOrder.Add(pizza);
             systemController.RequestOrder(pizzasToOrder, customerDTO);
-            Thread.Sleep(200);
+            while (!gotResponse)
+            {
+
+            }
+            gotResponse = false;
 
             Assert.AreEqual(false, resultTest);
 
             customerDTO.name = "Arthur";
             systemController.RequestOrder(pizzasToOrder, customerDTO);
-            Thread.Sleep(200);
+            while (!gotResponse)
+            {
+
+            }
+            gotResponse = false;
 
             Assert.AreEqual(true, resultTest);
         }
@@ -71,15 +97,22 @@ namespace Tests
             {
                 case "ORDER SUCCESSFUL - 200":
                     resultTest = true;
+                    gotResponse = true;
                     break;
                 case "ORDER FAILED - 404":
                     resultTest = false;
+                    gotResponse = true;
                     break;
                 case "SUBSCRIPTION SUCCESSFUL - 200":
                     resultTest = true;
+                    gotResponse = true;
                     break;
                 case "SUBSCRIPTION FAILED - 404":
                     resultTest = false;
+                    gotResponse = true;
+                    break;
+                case "PIZZAS RECEIVED":
+                    gotResponse = true;
                     break;
             }
         }

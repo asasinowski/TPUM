@@ -98,5 +98,13 @@ namespace DataClient.WebSockets
                 }
             }
         }
+
+        public bool CheckConnectionStatus()
+        {
+            if (webSocket.State == WebSocketState.Open)
+                return true;
+            else
+                return false;
+        }
     }
 }

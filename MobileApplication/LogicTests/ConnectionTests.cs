@@ -28,15 +28,18 @@ namespace Tests
             SystemController systemController = new SystemController();
             systemController.onProcess = new Action<string>(ReceiveMessage);
 
+            Stopwatch timeoutStopwatch = new Stopwatch();
+            timeoutStopwatch.Start();
             while (!systemController.webSocketController.webSocketClient.CheckConnectionStatus())
             {
-
+                if (timeoutStopwatch.ElapsedMilliseconds > 15000.0f) throw new TimeoutException();
             }
 
             systemController.RequestListOfPizzas();
+            timeoutStopwatch.Restart();
             while (!gotResponse)
             {
-
+                if (timeoutStopwatch.ElapsedMilliseconds > 15000.0f) throw new TimeoutException();
             }
             gotResponse = false;
             int NumberOfPizzas = systemController.repository.GetListViewPizzas().Count;
@@ -54,15 +57,18 @@ namespace Tests
             SystemController systemController = new SystemController();
             systemController.onProcess = new Action<string>(ReceiveMessage);
 
+            Stopwatch timeoutStopwatch = new Stopwatch();
+            timeoutStopwatch.Start();
             while (!systemController.webSocketController.webSocketClient.CheckConnectionStatus())
             {
-
+                if (timeoutStopwatch.ElapsedMilliseconds > 15000.0f) throw new TimeoutException();
             }
 
             systemController.RequestListOfPizzas();
+            timeoutStopwatch.Restart();
             while (!gotResponse)
             {
-
+                if (timeoutStopwatch.ElapsedMilliseconds > 15000.0f) throw new TimeoutException();
             }
             gotResponse = false;
             CustomerDTO customerDTO = new CustomerDTO();
@@ -72,9 +78,10 @@ namespace Tests
             List<PizzaDTO> pizzasToOrder = new List<PizzaDTO>();
             pizzasToOrder.Add(pizza);
             systemController.RequestOrder(pizzasToOrder, customerDTO);
+            timeoutStopwatch.Restart();
             while (!gotResponse)
             {
-
+                if (timeoutStopwatch.ElapsedMilliseconds > 15000.0f) throw new TimeoutException();
             }
             gotResponse = false;
 
@@ -82,9 +89,10 @@ namespace Tests
 
             customerDTO.name = "Arthur";
             systemController.RequestOrder(pizzasToOrder, customerDTO);
+            timeoutStopwatch.Restart();
             while (!gotResponse)
             {
-
+                if (timeoutStopwatch.ElapsedMilliseconds > 15000.0f) throw new TimeoutException();
             }
             gotResponse = false;
 
